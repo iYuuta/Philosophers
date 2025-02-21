@@ -8,11 +8,9 @@ t_philo	*ft_lstnew(int content)
 	if (!strc)
 		return (NULL);
 	strc->id = content;
-	strc->next = NULL;
-	strc->prev = NULL;
-	strc->thread = 0;
-	strc->left_fork = 0;
-	strc->right_fork = 0;
+	strc->next = strc;
+	strc->prev = strc;
+	strc->meals = 0;
 	return (strc);
 }
 

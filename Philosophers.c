@@ -1,111 +1,139 @@
 #include "Philosophers.h"
 
-void take_fork(t_fork *fork) {
-    pthread_mutex_lock(&fork->mutex);
-    while (fork->in_use){
-        pthread_cond_wait(&fork->cond, &fork->mutex);  // Wait until fork is available
+long long current_time(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (((long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void ft_print(char *str, t_philo *philo)
+{
+    pthread_mutex_lock(&(philo->info->print));
+    printf("%llu %d %s\n", (current_time() - philo->info->start_time), philo->id, str);
+    pthread_mutex_unlock(&(philo->info->print));
+}
+
+int	ft_usleep(size_t milliseconds)
+{
+	size_t	start;
+
+	start = current_time();
+	while ((current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
+}
+
+void    ft_exit(int idk, t_philo *philo, int size)
+{
+    int i;
+    t_philo *tmp;
+
+    tmp = philo;
+    i = 0;
+    while (i++ < size)
+    {
+        pthread_join(tmp->thread, NULL);
+        tmp = tmp->next;
     }
-    fork->in_use = 1;
-    pthread_mutex_unlock(&fork->mutex);
+    clear_up(philo, size, 0);
 }
 
-void put_fork(t_fork *fork) {
-    pthread_mutex_lock(&fork->mutex);
-    fork->in_use = 0;
-    pthread_cond_signal(&fork->cond);  // Notify waiting philosophers
-    pthread_mutex_unlock(&fork->mutex);
+int check_status(t_philo *philo)
+{
+    if ((current_time() - philo->last_meal) >= philo->info->time_to_die || (philo->info->av5 == 1 && philo->meals == philo->info->number_of_meals))
+        return (0);
+    return (1);
 }
+void    *routine(void *philos)
+{
+    t_philo *philo;
 
-void take_forks(t_philo *philo) {
-    pthread_mutex_lock(&philo->left_fork->mutex);
-    pthread_mutex_lock(&philo->right_fork->mutex);
-
-    while (philo->left_fork->in_use || philo->right_fork->in_use) {
-        pthread_cond_wait(&philo->left_fork->cond, &philo->left_fork->mutex);
-        pthread_cond_wait(&philo->right_fork->cond, &philo->right_fork->mutex);
-    }
-
-    philo->left_fork->in_use = 1;
-    philo->right_fork->in_use = 1;
-
-    printf("Philosopher %d picked up both forks 🍴\n", philo->id);
-    pthread_mutex_unlock(&philo->right_fork->mutex);
-    pthread_mutex_unlock(&philo->left_fork->mutex);
-}
-
-void put_forks(t_philo *philo) {
-    pthread_mutex_lock(&philo->left_fork->mutex);
-    pthread_mutex_lock(&philo->right_fork->mutex);
-
-    // Release both forks
-    philo->left_fork->in_use = 0;
-    philo->right_fork->in_use = 0;
-
-    // Notify waiting philosophers
-    pthread_cond_signal(&philo->left_fork->cond);
-    pthread_cond_signal(&philo->right_fork->cond);
-
-    printf("Philosopher %d put down both forks\n", philo->id);
-
-    pthread_mutex_unlock(&philo->right_fork->mutex);
-    pthread_mutex_unlock(&philo->left_fork->mutex);
-}
-
-void *philosopher_routine(void *arg) {
-    t_philo *philo = (t_philo *)arg;
-
-    while (1) {
-        take_forks(philo);
-
-        // Eating
-        printf("Philosopher %d is eating 🍝\n", philo->id);
-        sleep(1);
-
-        put_forks(philo);
-
-        // Sleeping
-        printf("Philosopher %d is sleeping 😴\n", philo->id);
-        sleep(2);
+    philo = (t_philo *)philos;
+    if (philo->id % 2 == 0)
+        ft_usleep(10);
+    philo->last_meal = current_time();
+    while (philo->info->exit)
+    {
+        if (!check_status(philo))
+        {
+            pthread_mutex_lock(&(philo->info->death));
+            ft_print("died", philo);
+            philo->info->exit = 0;
+            ft_exit(0, philo, philo->info->philos_number);
+            break;
+            pthread_mutex_unlock(&(philo->info->death));
+        }
+        pthread_mutex_lock(&(philo->fork));
+        ft_print("has taken a fork", philo);
+        pthread_mutex_lock(&(philo->next->fork));
+        ft_print("has taken a fork", philo);
+        ft_print("is eating", philo);
+        philo->last_meal = current_time();
+        ft_usleep(philo->info->time_to_eat);
+        philo->meals++;
+        if (!check_status(philo))
+        {
+            pthread_mutex_lock(&(philo->info->death));
+            ft_print("died", philo);
+            philo->info->exit = 0;
+            ft_exit(0, philo, philo->info->philos_number);
+            break;
+            pthread_mutex_unlock(&(philo->info->death));
+        }
+        pthread_mutex_unlock(&(philo->fork));
+        pthread_mutex_unlock(&(philo->next->fork));
+        ft_print("is sleeping", philo);
+        ft_usleep(philo->info->time_to_sleep);
+        if (!check_status(philo))
+        {
+            pthread_mutex_lock(&(philo->info->death));
+            ft_print("died", philo);
+            philo->info->exit = 0;
+            ft_exit(0, philo, philo->info->philos_number);
+            break;
+            pthread_mutex_unlock(&(philo->info->death));
+        }
+        ft_print("is thinking", philo);
     }
     return NULL;
 }
 
-int main(int ac, char **av) {
-    if (ac != 2) {
-        printf("Usage: %s <number_of_philosophers>\n", av[0]);
-        return 1;
+void f()
+{
+    system("leaks a.out");
+}
+int main(int ac, char **av)
+{
+    t_philo *philos;
+    t_info *info;
+    int size;
+    int i = 0;
+    
+    atexit(f);
+    if (check_args(ac, av) == 0)
+        return (write(2, "invalid args\n", 13), 1);
+    size = atoi(av[1]);
+    if (size > 200)
+        return (write(2, "too many philosophers\n", 22), 1);
+    philos = NULL;
+    philos = create_philos(philos, NULL, size);
+    if (!philos)
+        return (1);
+    info = set_info(ac, av);
+    if (!info)
+        return (clear_up(philos, size, 0), 1);
+    while (i < size)
+    {
+        philos->info = info;
+        pthread_create((&philos->thread), NULL, routine, philos);
+        philos = philos->next;
+        i++;
     }
-
-    int n = atoi(av[1]);
-    pthread_t threads[n];
-    t_fork forks[n];
-    t_philo philos[n];
-
-    // Initialize forks (mutex + condition variable)
-    for (int i = 0; i < n; i++) {
-        pthread_mutex_init(&forks[i].mutex, NULL);
-        pthread_cond_init(&forks[i].cond, NULL);
-        forks[i].in_use = 0;
+    i = 0;
+    while (i++ < size)
+    {
+        pthread_join((philos->thread), NULL);
+        philos = philos->next;
     }
-
-    // Initialize philosophers
-    for (int i = 0; i < n; i++) {
-        philos[i].id = i + 1;
-        philos[i].left_fork = &forks[i];
-        philos[i].right_fork = &forks[(i + 1) % n];  // Circular reference
-        pthread_create(&threads[i], NULL, philosopher_routine, &philos[i]);
-    }
-
-    // Wait for threads to finish
-    for (int i = 0; i < n; i++) {
-        pthread_join(threads[i], NULL);
-    }
-
-    // Cleanup
-    for (int i = 0; i < n; i++) {
-        pthread_mutex_destroy(&forks[i].mutex);
-        pthread_cond_destroy(&forks[i].cond);
-    }
-
-    return 0;
 }

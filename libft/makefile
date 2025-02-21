@@ -19,7 +19,7 @@ NAME = libft.a
 OBJ = ${SRC:.c=.o}
 OBJB = ${SRCB:.c=.o}
 CC = cc
-CF = -Wall -Wextra
+CF = -Wall -Wextra -Werror 
 
 all : ${NAME}
 	
