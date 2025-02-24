@@ -10,7 +10,6 @@ t_info *set_info(int ac, char **av)
     info->philos_number = atoi(av[1]);
 	pthread_mutex_init(&(info->print), NULL);
 	info->exit = 1;
-	info->dead = 1;
     info->start_time = current_time();
     info->time_to_die = atoi(av[2]);
     info->time_to_eat = atoi(av[3]);

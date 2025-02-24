@@ -5,7 +5,6 @@ int check_life_status(t_philo *philo)
     if ((current_time() - philo->last_meal) >= philo->info->time_to_die)
     {
         ft_print(" died", philo);
-        philo->info->dead = 0;
         philo->info->exit = 0;
         return (1);    
     }    
@@ -25,17 +24,11 @@ int check_meals(t_philo *philo)
 int monitoring(t_philo *arg)
 {
     t_philo *philo = (t_philo *)arg;
-    int i = 0;
-
-    while (i < philo->info->philos_number)
+    
+    if (!philo->info->exit || check_life_status(philo) || check_meals(philo))
     {
-        if (!philo->info->exit || check_life_status(philo) || check_meals(philo))
-        {
-            pthread_mutex_lock(&(philo->info->print));
-            return (1);
-        }
-        philo = philo->next;
-        i++;
+        pthread_mutex_lock(&(philo->info->print));
+        return (1);
     }
     return (0);
 }

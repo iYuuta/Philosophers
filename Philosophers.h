@@ -12,7 +12,6 @@ typedef struct s_info
 {
     pthread_mutex_t print;
     int             exit;
-    int             dead;
     int             av5;
     int     philos_number;
     long long  start_time;

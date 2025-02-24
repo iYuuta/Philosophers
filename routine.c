@@ -9,7 +9,6 @@ void    eat(t_philo *philo)
         ft_usleep(philo->info->time_to_die, philo);
         ft_print(" died", philo);
         philo->info->exit = 0;
-        philo->info->dead = 0;
         pthread_mutex_lock(&(philo->info->print));
         return ;
     }

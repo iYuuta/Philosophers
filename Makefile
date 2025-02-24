@@ -1,5 +1,4 @@
-SRC = create_philos.c error_check.c monitor.c routine.c lst.c \
-		Philosophers.c utilc.c
+SRC = create_philos.c error_check.c monitor.c routine.c lst.c Philosophers.c utils.c
 
 OBJ = $(SRC:.c=.o)
 
