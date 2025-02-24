@@ -53,5 +53,6 @@ t_philo	*ft_lstnew(int content);
 long long current_time(void);
 void ft_print(char *str, t_philo *philo);
 int	ft_usleep(size_t milliseconds, t_philo *philo);
+int check_meals(t_philo *philo);
 
 #endif

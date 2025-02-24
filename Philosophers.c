@@ -14,6 +14,8 @@ void *start_life(void *arg)
         if (!philo->info->exit)
             break;
         think(philo);
+        if (check_meals(philo))
+            break ;
         monitoring(philo);
     }
     pthread_mutex_unlock(&(philo->info->print));
