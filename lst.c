@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "Philosophers.h"
 
 t_philo	*ft_lstnew(int content)
 {
