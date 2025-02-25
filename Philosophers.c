@@ -37,7 +37,11 @@ int main(int ac, char **av)
         return (write(2, "too many philosophers\n", 22), 1);
     philos = NULL;
     info = set_info(ac, av);
+    if (!info)
+        return (1);
     philos = create_philos(philos, info, size);
+    if (!philos)
+        return (1);
     while (i++ < size)
     {
         if (philos->id % 2 == 0)

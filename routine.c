@@ -3,6 +3,11 @@
 void    eat(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->fork));
+    if (!philo->info->exit)
+    {
+        pthread_mutex_unlock(&(philo->fork));
+        return ;
+    }
     ft_print("has taken a fork", philo);
     if (philo->info->philos_number == 1)
     {
@@ -10,6 +15,7 @@ void    eat(t_philo *philo)
         ft_print("died", philo);
         philo->info->exit = 0;
         pthread_mutex_lock(&(philo->info->print));
+        pthread_mutex_unlock(&(philo->fork));
         return ;
     }
     pthread_mutex_lock(&(philo->next->fork));

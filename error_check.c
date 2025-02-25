@@ -23,6 +23,8 @@ void	clear_up(t_philo *philo, int size)
 	{
 		freed = 1;
 		pthread_mutex_destroy(&(info->print));
+		pthread_mutex_destroy(&(info->wait1));
+		pthread_mutex_destroy(&(info->wait2));
 		free(info);//all the threads try to free this pointer
 	}
 }

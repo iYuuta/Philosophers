@@ -2,14 +2,14 @@ SRC = create_philos.c error_check.c monitor.c routine.c lst.c Philosophers.c uti
 
 OBJ = $(SRC:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra 
 
-NAME = Philosophers
+NAME = philo
 
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	cc $(OBJ) -o $(NAME) 
+	cc $(OBJ) -g -fsanitize=thread -o $(NAME) 
 
 %.o : %.c Philosophers.h
 	cc $(CFLAGS) -c $< -o $@
