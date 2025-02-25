@@ -11,12 +11,15 @@
 typedef struct s_info
 {
     pthread_mutex_t print;
+    pthread_mutex_t wait1;
+    pthread_mutex_t wait2;
     int             exit;
     int             av5;
     int     philos_number;
     long long  start_time;
     long long  time_to_eat;
     long long  time_to_sleep;
+    long long  time_to_think;
     long long  time_to_die;
     int     number_of_meals;
 

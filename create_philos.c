@@ -9,11 +9,17 @@ t_info *set_info(int ac, char **av)
 		return (NULL);//protect
     info->philos_number = atoi(av[1]);
 	pthread_mutex_init(&(info->print), NULL);
+	pthread_mutex_init(&(info->wait1), NULL);
+	pthread_mutex_init(&(info->wait2), NULL);
 	info->exit = 1;
     info->start_time = current_time();
     info->time_to_die = atoi(av[2]);
     info->time_to_eat = atoi(av[3]);
     info->time_to_sleep = atoi(av[4]);
+    if (info->time_to_eat > info->time_to_sleep)
+        info->time_to_think = info->time_to_eat - info->time_to_sleep;
+    else
+        info->time_to_think = 0;
 	info->av5 = 0;
     if (ac > 5)
 	{

@@ -27,11 +27,14 @@ int	ft_usleep(size_t milliseconds, t_philo *philo)
 	while ((current_time() - start) < milliseconds)
     {
         usleep(500);
+        pthread_mutex_lock(&(philo->info->wait1));
         if (check_life_status(philo))
         {
             philo->info->exit = 0;
+            pthread_mutex_unlock(&(philo->info->wait1));
             return 0;
         }
+        pthread_mutex_unlock(&(philo->info->wait1));
     }
 	return (0);
 }
