@@ -6,10 +6,10 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME = Philosophers
 
-ALL : $(NAME)
+all : $(NAME)
 
 $(NAME) : $(OBJ)
-	cc  $(OBJ) -o $(NAME)
+	cc  $(OBJ) -fsanitize=thread -o $(NAME)
 
 %.o : %.c Philosophers.h
 	cc $(CFLAGS) -c $< -o $@

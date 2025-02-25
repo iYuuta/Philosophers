@@ -4,6 +4,8 @@ void *start_life(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
     
+    if (philo->id % 2 == 0)
+            usleep(50);
     philo->last_meal = current_time();
     while (philo->info->exit)
     {
@@ -39,8 +41,6 @@ int main(int ac, char **av)
     philos = create_philos(philos, info, size);
     while (i++ < size)
     {
-        if (philos->id % 2 == 0)
-            usleep(50);
         pthread_create(&(philos->thread), NULL, start_life, philos);
         philos = philos->next;
     }

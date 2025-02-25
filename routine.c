@@ -7,14 +7,15 @@ void    eat(t_philo *philo)
     if (philo->info->philos_number == 1)
     {
         ft_usleep(philo->info->time_to_die, philo);
-        ft_print(" died", philo);
+        ft_print("died", philo);
         philo->info->exit = 0;
         pthread_mutex_lock(&(philo->info->print));
+        pthread_mutex_unlock(&(philo->fork));
         return ;
     }
     pthread_mutex_lock(&(philo->next->fork));
     ft_print("has taken a fork", philo);
-    ft_print(" is eating", philo);
+    ft_print("is eating", philo);
     ft_usleep(philo->info->time_to_eat, philo);
     philo->meals++;
     philo->last_meal = current_time();
@@ -25,11 +26,11 @@ void    eat(t_philo *philo)
 
 void sleeep(t_philo *philo)
 {
-    ft_print(" is sleeping", philo);
+    ft_print("is sleeping", philo);
     ft_usleep(philo->info->time_to_sleep, philo);
 }
 
 void think(t_philo *philo)
 {
-    ft_print(" is thinking", philo);
+    ft_print("is thinking", philo);
 }

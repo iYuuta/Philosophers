@@ -27,8 +27,11 @@ int	ft_usleep(size_t milliseconds, t_philo *philo)
 	while ((current_time() - start) < milliseconds)
     {
         usleep(500);
-        if (!philo->info->exit)
+        if (check_life_status(philo))
+        {
+            philo->info->exit = 0;
             return 0;
+        }
     }
 	return (0);
 }
