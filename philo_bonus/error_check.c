@@ -5,15 +5,15 @@ void	destroy_sem(t_info *info)
 	sem_unlink("/wait");
 	sem_unlink("/terminate");
 	sem_unlink("/forks");
-	sem_destroy(info->forks);
-	sem_destroy(info->wait);
-	sem_destroy(info->terminate);
+	sem_close(info->forks);
+	sem_close(info->wait);
+	sem_close(info->terminate);
 }
 
 void	clear_up(t_philo *philo, int size)
 {
-	t_philo *tmp;
-	t_info *info;
+	t_philo	*tmp;
+	t_info	*info;
 	int		i;
 
 	i = 0;
@@ -37,7 +37,7 @@ int	check_args(int ac, char **av)
 	int	j;
 
 	if (ac < 5 || ac > 6)
-        return (0);
+		return (0);
 	i = 0;
 	while (++i < ac)
 	{

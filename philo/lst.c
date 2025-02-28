@@ -47,20 +47,20 @@ int	ft_lstsize(t_philo *lst)
 	return (size);
 }
 
-void ft_lstadd_back(t_philo **lst, t_philo *new)
+void	ft_lstadd_back(t_philo **lst, t_philo *new)
 {
-    t_philo *temp;
+	t_philo	*temp;
 
-    if (!lst || !new)
-        return ;
-    temp = ft_lstlast(*lst);
-    if (temp)
-    {
+	if (!lst || !new)
+		return ;
+	temp = ft_lstlast(*lst);
+	if (temp)
+	{
 		(*lst)->prev = new;
 		new->next = (*lst);
-        temp->next = new;
-        new->prev = temp;
-    }
-    else
-        *lst = new;
+		temp->next = new;
+		new->prev = temp;
+	}
+	else
+		*lst = new;
 }

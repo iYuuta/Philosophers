@@ -3,7 +3,7 @@
 size_t	ft_atoi(const char *str)
 {
 	int			i;
-	size_t	    result;
+	size_t		result;
 
 	i = 0;
 	result = 0;
@@ -15,21 +15,21 @@ size_t	ft_atoi(const char *str)
 	return (result);
 }
 
-long long current_time(void)
+size_t	current_time(void)
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (((long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (((size_t)tv.tv_sec * 1000) + (size_t)(tv.tv_usec / 1000));
 }
 
-void ft_print(char *str, t_philo *philo, int con)
+void	ft_print(char *str, t_philo *philo, int con)
 {
-    sem_wait(philo->info->wait);
-    // if (!philo->died)
-    //     return ;
-    printf("%llu %d %s\n", (current_time() - philo->info->start_time), philo->id, str);
-    if (!con)
-        sem_post(philo->info->wait);
+	sem_wait(philo->info->wait);
+	printf("%zu %d %s\n", (current_time() - philo->info->start_time),
+		philo->id, str);
+	if (!con)
+		sem_post(philo->info->wait);
 }
 
 int	ft_usleep(size_t milliseconds, t_philo *philo)
@@ -38,10 +38,10 @@ int	ft_usleep(size_t milliseconds, t_philo *philo)
 
 	start = current_time();
 	while ((current_time() - start) < milliseconds)
-    {
-        if (monitoring(philo))
-            return (0);
-        usleep(500);
-    }
+	{
+		if (monitoring(philo))
+			return (0);
+		usleep(500);
+	}
 	return (0);
 }

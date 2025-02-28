@@ -2,10 +2,10 @@
 
 void	clear_up(t_philo *philo, int size)
 {
-	t_philo *tmp;
-	t_info *info;
-    static int freed;
-	int		i;
+	t_philo		*tmp;
+	t_info		*info;
+	static int	freed;
+	int			i;
 
 	i = 0;
 	if (!philo)
@@ -25,7 +25,7 @@ void	clear_up(t_philo *philo, int size)
 		pthread_mutex_destroy(&(info->print));
 		pthread_mutex_destroy(&(info->wait1));
 		pthread_mutex_destroy(&(info->wait2));
-		free(info);//all the threads try to free this pointer
+		free(info);
 	}
 }
 
@@ -35,7 +35,7 @@ int	check_args(int ac, char **av)
 	int	j;
 
 	if (ac < 5 || ac > 6)
-        return (0);
+		return (0);
 	i = 0;
 	while (++i < ac)
 	{

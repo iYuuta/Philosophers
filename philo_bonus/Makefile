@@ -5,7 +5,7 @@ OBJ = $(SRC:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror
 
-NAME = philo
+NAME = philo_bonus
 
 all : $(NAME)
 

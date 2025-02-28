@@ -25,6 +25,23 @@ int	start_life(t_philo *philo)
 	}
 }
 
+int	finish_life(t_philo *philo, int *pid, int size)
+{
+	int	i;
+
+	i = -1;
+	if (philo->info->av5)
+	{
+		while (++i < size)
+			waitpid(pid[i], NULL, 0);
+		return (free(pid), 0);
+	}
+	sem_wait(philo->info->terminate);
+	while (++i < size)
+		kill(pid[i], SIGTERM);
+	return (free(pid), 0);
+}
+
 int	process_init(t_philo *philo, int *pid, int size)
 {
 	int	i;
@@ -46,40 +63,31 @@ int	process_init(t_philo *philo, int *pid, int size)
 		}
 		philo = philo->next;
 	}
-	i = -1;
-	if (philo->info->av5)
-	{
-		while (++i < size)
-			waitpid(pid[i], NULL, 0);
-		clear_up(philo, size);
-		return (free(pid), 0);
-	}
-	sem_wait(philo->info->terminate);
-	while (++i < size)
-		kill(pid[i], SIGTERM);
-	return (clear_up(philo, size), free(pid), 0);
+	return (finish_life(philo, pid, size));
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	int *pid;
-	t_philo *philo = NULL;
-	t_info *info;
-	int	size;
+	int		*pid;
+	t_philo	*philo;
+	t_info	*info;
+	size_t	size;
 
+	philo = NULL;
 	if (check_args(ac, av) == 0)
-        return (write(2, "invalid args\n", 13), 1);
-    size = ft_atoi(av[1]);
+		return (write(2, "invalid args\n", 13), 1);
+	size = ft_atoi(av[1]);
+	if (size > 200 || size == 0)
+	{
+		return (write(2, "Error\n", 6), 1);
+	}
 	pid = malloc(sizeof(int) * (size + 1));
 	if (!pid)
 		return (write(2, "malloc failed\n", 14), 1);
 	info = set_info(ac, av);
 	philo = create_philos(philo, info, size);
 	sem_wait(philo->info->terminate);
-    if (size > 200)
-	{
-		return (write(2, "too many philosophers\n", 22), 1);
-	}
 	process_init(philo, pid, size);
+	clear_up(philo, size);
 	return (0);
 }
