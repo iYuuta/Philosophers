@@ -1,10 +1,12 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 void *start_life(void *arg)
 {
     t_philo *philo;
     
     philo = (t_philo *)arg;
+    if (philo->id % 2 == 0)
+            usleep(50);
     philo->last_meal = current_time();
     while (philo->info->exit)
     {
@@ -20,7 +22,7 @@ void *start_life(void *arg)
         monitoring(philo);
     }
     pthread_mutex_unlock(&(philo->info->print));
-    return NULL;
+    return (NULL);
 }
 
 int main(int ac, char **av)
@@ -44,8 +46,6 @@ int main(int ac, char **av)
         return (1);
     while (i++ < size)
     {
-        if (philos->id % 2 == 0)
-            usleep(50);
         pthread_create(&(philos->thread), NULL, start_life, philos);
         philos = philos->next;
     }

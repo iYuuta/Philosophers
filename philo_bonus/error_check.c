@@ -1,4 +1,4 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 void	clear_up(t_philo *philo, int size)
 {
@@ -15,16 +15,16 @@ void	clear_up(t_philo *philo, int size)
 	{
 		tmp = philo;
 		philo = philo->next;
-		pthread_mutex_destroy(&(tmp->fork));
+		// pthread_mutex_destroy(&(tmp->fork));
 		free(tmp);
 		tmp = NULL;
 	}
 	if (freed == 0 && info)
 	{
 		freed = 1;
-		pthread_mutex_destroy(&(info->print));
-		pthread_mutex_destroy(&(info->wait1));
-		pthread_mutex_destroy(&(info->wait2));
+		// pthread_mutex_destroy(&(info->print));
+		// pthread_mutex_destroy(&(info->wait1));
+		// pthread_mutex_destroy(&(info->wait2));
 		free(info);//all the threads try to free this pointer
 	}
 }

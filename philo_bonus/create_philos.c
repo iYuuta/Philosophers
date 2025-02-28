@@ -1,34 +1,39 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
-t_info *init_mutex(t_info *info)
+t_info *init_forks(t_info *info, int size)
 {
-    if (pthread_mutex_init(&(info->print), NULL))
-    {
-        return (free(info), NULL);
-    }
-	if (pthread_mutex_init(&(info->wait1), NULL))
-    {
-        return (pthread_mutex_destroy(&(info->print)), free(info), NULL);
-    }
-	if (pthread_mutex_init(&(info->wait2), NULL))
-    {
-        return (pthread_mutex_destroy(&(info->print)),
-            pthread_mutex_destroy(&(info->wait1)), free(info), NULL);
-    }
+    int i;
+
+    i = -1;
+    sem_unlink("/wait");
+    sem_unlink("/terminate");
+    info->wait = sem_open("/wait", O_CREAT | O_TRUNC, 0666, 1);
+    if (!info->wait)
+        return (NULL);
+    info->terminate = sem_open("/terminate", O_CREAT | O_TRUNC, 0666, 1);
+    if (!info->terminate)
+        return (NULL);
+    sem_unlink("/forks");
+    info->forks = sem_open("/forks", O_CREAT | O_TRUNC, 0666, size);
+    if (!info->forks)
+        return (sem_close(info->wait), NULL);
     return (info);
 }
+
 t_info *set_info(int ac, char **av)
 {
     t_info *info;
 
     info = malloc(sizeof(t_info));
 	if (!info)
-		return (NULL);//protect
-    info = init_mutex(info);
-    if (!info)
-        return (NULL);
+		return (NULL);
     info->philos_number = atoi(av[1]);
-	info->exit = 1;
+    info->forks = malloc(sizeof(sem_t *) * info->philos_number);
+    if (!info->forks)
+        return (free(info), NULL);
+    info = init_forks(info, info->philos_number);
+    if (!info)
+        return (free(info->forks), free(info), NULL);
     info->start_time = current_time();
     info->time_to_die = atoi(av[2]);
     info->time_to_eat = atoi(av[3]);
@@ -50,7 +55,7 @@ t_info *set_info(int ac, char **av)
 t_philo *create_philos(t_philo *philos, t_info *info, int size)
 {
     t_philo *tmp;
-    int i;
+    int     i;
 
     i = -1;
     while (++i < size)
@@ -59,8 +64,6 @@ t_philo *create_philos(t_philo *philos, t_info *info, int size)
         if (!tmp)
             return (clear_up(philos, i), free(info), info = NULL, NULL);
         tmp->info = info;
-        if (pthread_mutex_init(&(tmp->fork), NULL) != 0)
-            return (clear_up(philos, i), NULL);
         ft_lstadd_back(&philos, tmp);
     }
     return (philos);

@@ -1,9 +1,9 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 int check_life_status(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->info->wait2));
-    if ((current_time() - philo->last_meal) >= philo->info->time_to_die)
+    if ((current_time() - philo->last_meal) > philo->info->time_to_die)
     {
         ft_print("died", philo);
         philo->info->exit = 0;
@@ -17,7 +17,7 @@ int check_life_status(t_philo *philo)
 int check_meals(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->info->wait2));
-    if (philo->info->av5 && philo->meals >= philo->info->number_of_meals)
+    if (philo->info->av5 && philo->meals > philo->info->number_of_meals)
     {
         pthread_mutex_unlock(&(philo->info->wait2));
         return (1);

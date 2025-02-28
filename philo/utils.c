@@ -1,4 +1,4 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 long long current_time(void)
 {

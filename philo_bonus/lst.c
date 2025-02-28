@@ -1,4 +1,4 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 t_philo	*ft_lstnew(int content)
 {
@@ -8,9 +8,10 @@ t_philo	*ft_lstnew(int content)
 	if (!strc)
 		return (NULL);
 	strc->id = content;
+	strc->died = 1;
 	strc->next = strc;
 	strc->prev = strc;
-	strc->meals = 0;
+	strc->meals = 1;
 	return (strc);
 }
 

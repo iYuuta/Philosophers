@@ -1,4 +1,4 @@
-#include "Philosophers.h"
+#include "philosophers.h"
 
 void    eat(t_philo *philo)
 {
@@ -19,10 +19,10 @@ void    eat(t_philo *philo)
         return ;
     }
     pthread_mutex_lock(&(philo->next->fork));
-    philo->meals++;
-    philo->last_meal = current_time();
     ft_print("has taken a fork", philo);
     ft_print("is eating", philo);
+    philo->meals++;
+    philo->last_meal = current_time();
     ft_usleep(philo->info->time_to_eat, philo);
     pthread_mutex_unlock(&(philo->next->fork));
     pthread_mutex_unlock(&(philo->fork));
