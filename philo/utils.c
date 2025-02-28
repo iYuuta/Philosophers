@@ -1,5 +1,20 @@
 #include "philosophers.h"
 
+size_t	ft_atoi(const char *str)
+{
+	int			i;
+	size_t	    result;
+
+	i = 0;
+	result = 0;
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		result = (result * 10) + (str[i] - 48);
+		i++;
+	}
+	return (result);
+}
+
 long long current_time(void)
 {
     struct timeval tv;

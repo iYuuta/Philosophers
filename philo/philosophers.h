@@ -53,6 +53,7 @@ void	ft_lstadd_back(t_philo **lst, t_philo *new);
 t_philo	*ft_lstlast(t_philo *lst);
 t_philo	*ft_lstnew(int content);
 
+size_t	ft_atoi(const char *str);
 long long current_time(void);
 void ft_print(char *str, t_philo *philo);
 int	ft_usleep(size_t milliseconds, t_philo *philo);

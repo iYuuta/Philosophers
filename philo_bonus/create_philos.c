@@ -2,9 +2,6 @@
 
 t_info *init_forks(t_info *info, int size)
 {
-    int i;
-
-    i = -1;
     sem_unlink("/wait");
     sem_unlink("/terminate");
     info->wait = sem_open("/wait", O_CREAT | O_TRUNC, 0666, 1);
@@ -27,17 +24,14 @@ t_info *set_info(int ac, char **av)
     info = malloc(sizeof(t_info));
 	if (!info)
 		return (NULL);
-    info->philos_number = atoi(av[1]);
-    info->forks = malloc(sizeof(sem_t *) * info->philos_number);
-    if (!info->forks)
-        return (free(info), NULL);
+    info->philos_number = ft_atoi(av[1]);
     info = init_forks(info, info->philos_number);
     if (!info)
-        return (free(info->forks), free(info), NULL);
+        return (free(info), NULL);
     info->start_time = current_time();
-    info->time_to_die = atoi(av[2]);
-    info->time_to_eat = atoi(av[3]);
-    info->time_to_sleep = atoi(av[4]);
+    info->time_to_die = ft_atoi(av[2]);
+    info->time_to_eat = ft_atoi(av[3]);
+    info->time_to_sleep = ft_atoi(av[4]);
     info->time_to_think = 0;
     if (info->time_to_eat > info->time_to_sleep)
     {
@@ -46,7 +40,7 @@ t_info *set_info(int ac, char **av)
 	info->av5 = 0;
     if (ac > 5)
 	{
-        info->number_of_meals = atoi(av[5]);
+        info->number_of_meals = ft_atoi(av[5]);
 		info->av5 = 1;
 	}
     return (info);

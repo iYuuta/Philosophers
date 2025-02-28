@@ -1,10 +1,19 @@
 #include "philosophers.h"
 
+void	destroy_sem(t_info *info)
+{
+	sem_unlink("/wait");
+	sem_unlink("/terminate");
+	sem_unlink("/forks");
+	sem_destroy(info->forks);
+	sem_destroy(info->wait);
+	sem_destroy(info->terminate);
+}
+
 void	clear_up(t_philo *philo, int size)
 {
 	t_philo *tmp;
 	t_info *info;
-    static int freed;
 	int		i;
 
 	i = 0;
@@ -15,18 +24,11 @@ void	clear_up(t_philo *philo, int size)
 	{
 		tmp = philo;
 		philo = philo->next;
-		// pthread_mutex_destroy(&(tmp->fork));
 		free(tmp);
 		tmp = NULL;
 	}
-	if (freed == 0 && info)
-	{
-		freed = 1;
-		// pthread_mutex_destroy(&(info->print));
-		// pthread_mutex_destroy(&(info->wait1));
-		// pthread_mutex_destroy(&(info->wait2));
-		free(info);//all the threads try to free this pointer
-	}
+	destroy_sem(info);
+	free(info);
 }
 
 int	check_args(int ac, char **av)

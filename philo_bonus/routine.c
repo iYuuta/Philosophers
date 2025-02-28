@@ -1,17 +1,18 @@
 #include "philosophers.h"
 
-int get_fork(t_philo *philo)
-{
-	return ((philo->id) % philo->info->philos_number);
-}
-
 void	eat(t_philo *philo)
 {
-	int a;
-
 	sem_wait(philo->info->forks);
 	ft_print("has taken a fork", philo, 0);
-	a = get_fork(philo);
+	if (philo->info->philos_number == 1)
+	{
+		ft_usleep(philo->info->time_to_die, philo);
+		ft_print("died", philo, 0);
+		philo->died = 0;
+		sem_post(philo->info->terminate);
+		sem_wait(philo->info->wait);
+		return ;
+	}
 	sem_wait(philo->info->forks);
 	ft_print("has taken a fork", philo, 0);
 	philo->last_meal = current_time();

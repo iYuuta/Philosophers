@@ -18,11 +18,29 @@ void *start_life(void *arg)
             break;
         think(philo);
         if (check_meals(philo))
-            break ;
+            return (NULL);
         monitoring(philo);
     }
     pthread_mutex_unlock(&(philo->info->print));
     return (NULL);
+}
+
+void    thread_init(t_philo *philo, int size)
+{
+    int i;
+
+    i = 0;
+    while (i++ < size)
+    {
+        pthread_create(&(philo->thread), NULL, start_life, philo);
+        philo = philo->next;
+    }
+    i = 0;
+    while (i++ < size)
+    {
+        pthread_join(philo->thread, NULL);
+        philo = philo->next;
+    }
 }
 
 int main(int ac, char **av)
@@ -30,7 +48,6 @@ int main(int ac, char **av)
     t_philo *philos;
     t_info *info;
     int size;
-    int i = 0;
     
     if (check_args(ac, av) == 0)
         return (write(2, "invalid args\n", 13), 1);
@@ -44,16 +61,6 @@ int main(int ac, char **av)
     philos = create_philos(philos, info, size);
     if (!philos)
         return (1);
-    while (i++ < size)
-    {
-        pthread_create(&(philos->thread), NULL, start_life, philos);
-        philos = philos->next;
-    }
-    i = 0;
-    while (i++ < size)
-    {
-        pthread_join(philos->thread, NULL);
-        philos = philos->next;
-    }
+    thread_init(philos, size);
     clear_up(philos, size);
 }
