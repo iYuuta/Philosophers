@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-02-28 19:34:41 by yoayedde          #+#    #+#             */
+/*   Updated: 2025-02-28 19:34:41 by yoayedde         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
 size_t	ft_atoi(const char *str)
@@ -46,14 +58,12 @@ int	ft_usleep(size_t milliseconds, t_philo *philo)
 	while ((current_time() - start) < milliseconds)
 	{
 		usleep(500);
-		pthread_mutex_lock(&(philo->info->wait1));
-		if (check_life_status(philo))
+		check_life_status(philo);
+		if (!philo->info->exit)
 		{
 			philo->info->exit = 0;
-			pthread_mutex_unlock(&(philo->info->wait1));
 			return (0);
 		}
-		pthread_mutex_unlock(&(philo->info->wait1));
 	}
 	return (0);
 }

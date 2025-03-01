@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-02-28 19:34:31 by yoayedde          #+#    #+#             */
+/*   Updated: 2025-02-28 19:34:31 by yoayedde         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
 void	*start_life(void *arg)
@@ -6,7 +18,7 @@ void	*start_life(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(50);
+		usleep(500);
 	philo->last_meal = current_time();
 	while (philo->info->exit)
 	{

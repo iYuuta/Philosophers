@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-02-28 19:34:38 by yoayedde          #+#    #+#             */
+/*   Updated: 2025-02-28 19:34:38 by yoayedde         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
 int	lone_fella(t_philo *philo)
@@ -16,11 +28,8 @@ int	lone_fella(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	if (philo->id < philo->next->id)
-		pthread_mutex_lock(&(philo->fork));
-	else
-		pthread_mutex_lock(&(philo->next->fork));
-	if (!philo->info->exit)
+	pthread_mutex_lock(&(philo->fork));
+	if (monitoring(philo))
 	{
 		pthread_mutex_unlock(&(philo->fork));
 		return ;
@@ -28,10 +37,7 @@ void	eat(t_philo *philo)
 	ft_print("has taken a fork", philo);
 	if (lone_fella(philo))
 		return ;
-	if (philo->id < philo->next->id)
-		pthread_mutex_lock(&(philo->next->fork));
-	else
-		pthread_mutex_lock(&(philo->fork));
+	pthread_mutex_lock(&(philo->next->fork));
 	ft_print("has taken a fork", philo);
 	ft_print("is eating", philo);
 	philo->meals++;

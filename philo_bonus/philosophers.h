@@ -1,12 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-02-28 19:35:05 by yoayedde          #+#    #+#             */
+/*   Updated: 2025-02-28 19:35:05 by yoayedde         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <fcntl.h>
 # include <stdio.h>
 # include <signal.h>
-# include <limits.h>
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <semaphore.h>
