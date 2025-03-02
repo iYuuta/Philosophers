@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   error_check.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:19 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:19 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
 void	clear_up(t_philo *philo, int size)
@@ -35,8 +23,7 @@ void	clear_up(t_philo *philo, int size)
 	{
 		freed = 1;
 		pthread_mutex_destroy(&(info->print));
-		pthread_mutex_destroy(&(info->wait1));
-		pthread_mutex_destroy(&(info->wait2));
+		pthread_mutex_destroy(&(info->wait));
 		free(info);
 	}
 }

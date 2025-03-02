@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   create_philos.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:13 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:13 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
 t_info	*init_mutex(t_info *info)
@@ -18,14 +6,9 @@ t_info	*init_mutex(t_info *info)
 	{
 		return (free(info), NULL);
 	}
-	if (pthread_mutex_init(&(info->wait1), NULL))
+	if (pthread_mutex_init(&(info->wait), NULL))
 	{
 		return (pthread_mutex_destroy(&(info->print)), free(info), NULL);
-	}
-	if (pthread_mutex_init(&(info->wait2), NULL))
-	{
-		return (pthread_mutex_destroy(&(info->print)),
-			pthread_mutex_destroy(&(info->wait1)), free(info), NULL);
 	}
 	return (info);
 }

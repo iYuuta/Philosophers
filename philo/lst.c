@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lst.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:24 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:24 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
 t_philo	*ft_lstnew(int content)
@@ -22,7 +10,7 @@ t_philo	*ft_lstnew(int content)
 	strc->id = content;
 	strc->next = strc;
 	strc->prev = strc;
-	strc->meals = 1;
+	strc->meals = 0;
 	return (strc);
 }
 

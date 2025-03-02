@@ -1,52 +1,39 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   monitor.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:27 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:27 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
-int	check_life_status(t_philo *philo)
-{
-	pthread_mutex_lock(&(philo->info->wait2));
-	if ((current_time() - philo->last_meal) > philo->info->time_to_die)
-	{
-		ft_print("died", philo);
-		philo->info->exit = 0;
-		pthread_mutex_unlock(&(philo->info->wait2));
-		return (1);
-	}
-	pthread_mutex_unlock(&(philo->info->wait2));
-	return (0);
-}
 
 int	check_meals(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->info->wait2));
 	if (philo->info->av5 && philo->meals > philo->info->number_of_meals)
-	{
-		pthread_mutex_unlock(&(philo->info->wait2));
 		return (1);
-	}
-	pthread_mutex_unlock(&(philo->info->wait2));
 	return (0);
 }
 
-int	monitoring(t_philo *philo)
+void	*monitoring(void *arg)
 {
-	pthread_mutex_lock(&(philo->info->wait1));
-	if (!philo->info->exit || check_life_status(philo))
+	t_philo *philo;
+	int		meals;
+
+	meals = 0;
+	philo = (t_philo *)arg;
+	usleep(1000);
+	while (1)
 	{
-		pthread_mutex_lock(&(philo->info->print));
-		pthread_mutex_unlock(&(philo->info->wait1));
-		return (1);
+		if (philo->info->av5 && philo->meals == philo->info->number_of_meals)
+		{
+			meals++;
+			philo->meals++;
+		}
+		else if (current_time() > philo->info->time_to_die + philo->last_meal)
+		{
+			pthread_mutex_lock(&(philo->info->wait));
+			ft_print("died", philo);
+			pthread_mutex_unlock(&(philo->info->wait));
+			pthread_mutex_lock(&(philo->info->print));
+			return (NULL);
+		}
+		if (meals == philo->info->philos_number)
+			return (NULL);
+		philo = philo->next;
 	}
-	pthread_mutex_unlock(&(philo->info->wait1));
-	return (0);
+	return (NULL);
 }

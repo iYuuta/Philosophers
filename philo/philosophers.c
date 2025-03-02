@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:31 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:31 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
 void	*start_life(void *arg)
@@ -18,7 +6,7 @@ void	*start_life(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(500);
+		usleep(50);
 	philo->last_meal = current_time();
 	while (philo->info->exit)
 	{
@@ -31,7 +19,6 @@ void	*start_life(void *arg)
 		think(philo);
 		if (check_meals(philo))
 			return (NULL);
-		monitoring(philo);
 	}
 	pthread_mutex_unlock(&(philo->info->print));
 	return (NULL);
@@ -40,6 +27,7 @@ void	*start_life(void *arg)
 void	thread_init(t_philo *philo, int size)
 {
 	int	i;
+	pthread_t monitor;
 
 	i = 0;
 	while (i++ < size)
@@ -47,7 +35,10 @@ void	thread_init(t_philo *philo, int size)
 		pthread_create(&(philo->thread), NULL, start_life, philo);
 		philo = philo->next;
 	}
+	if (pthread_create(&monitor, NULL, monitoring, philo))
+		return ;
 	i = 0;
+	pthread_join(monitor, NULL);
 	while (i++ < size)
 	{
 		pthread_join(philo->thread, NULL);

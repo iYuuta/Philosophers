@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoayedde <yoayedde@student.42.fr>          #+#  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-02-28 19:34:41 by yoayedde          #+#    #+#             */
-/*   Updated: 2025-02-28 19:34:41 by yoayedde         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "philosophers.h"
 
-size_t	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int			i;
-	size_t		result;
+	long		result;
 
 	i = 0;
 	result = 0;
@@ -27,12 +15,12 @@ size_t	ft_atoi(const char *str)
 	return (result);
 }
 
-size_t	current_time(void)
+long	current_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (((size_t)tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	return (((long)tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 void	ft_print(char *str, t_philo *philo)
@@ -45,25 +33,21 @@ void	ft_print(char *str, t_philo *philo)
 	}
 	if (str && str[0] == 'd')
 		philo->info->exit = 0;
-	printf("%zu %d %s\n", (current_time() - philo->info->start_time),
+	printf("%ld %d %s\n", (current_time() - philo->info->start_time),
 		philo->id, str);
 	pthread_mutex_unlock(&(philo->info->print));
 }
 
-int	ft_usleep(size_t milliseconds, t_philo *philo)
+int	ft_usleep(long milliseconds, t_philo *philo)
 {
-	size_t	start;
+	long	start;
 
 	start = current_time();
 	while ((current_time() - start) < milliseconds)
 	{
 		usleep(500);
-		check_life_status(philo);
 		if (!philo->info->exit)
-		{
-			philo->info->exit = 0;
 			return (0);
-		}
 	}
 	return (0);
 }
