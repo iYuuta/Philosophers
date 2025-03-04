@@ -6,7 +6,7 @@ void	*start_life(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(50);
+		usleep(500);
 	philo->last_meal = current_time();
 	while (philo->info->exit)
 	{

@@ -32,7 +32,11 @@ void	ft_print(char *str, t_philo *philo)
 		return ;
 	}
 	if (str && str[0] == 'd')
+	{
+		pthread_mutex_lock(&(philo->info->wait));
 		philo->info->exit = 0;
+		pthread_mutex_unlock(&(philo->info->wait));
+	}
 	printf("%ld %d %s\n", (current_time() - philo->info->start_time),
 		philo->id, str);
 	pthread_mutex_unlock(&(philo->info->print));

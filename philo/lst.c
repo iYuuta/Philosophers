@@ -11,6 +11,7 @@ t_philo	*ft_lstnew(int content)
 	strc->next = strc;
 	strc->prev = strc;
 	strc->meals = 0;
+	strc->done_eating = 0;
 	return (strc);
 }
 
