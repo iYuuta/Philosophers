@@ -3,14 +3,15 @@ SRC = create_philos.c error_check.c monitor.c \
 
 OBJ = $(SRC:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
 
 NAME = philo
 
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	cc $(OBJ) -o $(NAME)
+	cc $(OBJ) -o $(NAME) 
+
 %.o : %.c philosophers.h
 	cc $(CFLAGS) -c $< -o $@
 

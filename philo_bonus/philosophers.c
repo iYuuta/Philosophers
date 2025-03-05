@@ -78,16 +78,19 @@ int	main(int ac, char **av)
 		return (write(2, "invalid args\n", 13), 1);
 	size = ft_atoi(av[1]);
 	if (size > 200 || size == 0)
-	{
 		return (write(2, "Error\n", 6), 1);
-	}
 	pid = malloc(sizeof(int) * (size + 1));
 	if (!pid)
 		return (write(2, "malloc failed\n", 14), 1);
 	info = set_info(ac, av);
+	if (!info)
+		return (1);
+	if (info->av5 && info->number_of_meals == 0)
+		return (free(info), free(pid), 0);
 	philo = create_philos(philo, info, size);
+	if (!philo)
+		return (free(info), 1);
 	sem_wait(philo->info->terminate);
 	process_init(philo, pid, size);
-	clear_up(philo, size);
-	return (0);
+	return (clear_up(philo, size), 0);
 }

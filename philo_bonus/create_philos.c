@@ -2,6 +2,8 @@
 
 int	ft_death(t_info *info)
 {
+	if (info->number_of_meals == 0)
+		return (1);
 	if ((info->time_to_die < info->time_to_eat * 2)
 		|| info->time_to_die < info->time_to_eat + info->time_to_sleep)
 		return (0);

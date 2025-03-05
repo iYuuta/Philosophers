@@ -27,7 +27,6 @@ typedef struct s_philo
 {
 	int				id;
 	long			meals;
-	long			done_eating;
 	long			last_meal;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
@@ -41,7 +40,7 @@ t_info	*set_info(int ac, char **av);
 long	current_time(void);
 int		check_args(int ac, char **av);
 void	clear_up(t_philo *philo, int size);
-void	*monitoring(void *arg);
+void	*monitoring(void *philo);
 
 void	think(t_philo *philo);
 void	sleeep(t_philo *philo);
