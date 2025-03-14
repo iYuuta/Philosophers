@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "philosophers.h": "c",
-        "atomic": "c",
-        "pthread.h": "c",
-        "time.h": "c",
-        "stdio.h": "c"
-    }
-}
