@@ -16,6 +16,7 @@ void	clear_up(t_philo *philo, int size)
 		tmp = philo;
 		philo = philo->next;
 		pthread_mutex_destroy(&(tmp->fork));
+		pthread_mutex_destroy(&(tmp->eat));
 		free(tmp);
 		tmp = NULL;
 	}

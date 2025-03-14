@@ -18,22 +18,25 @@ void	*start_life(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	pthread_mutex_lock(&(philo->eat));
 	philo->last_meal = current_time();
+	pthread_mutex_unlock(&(philo->eat));
 	if (philo->id % 2 == 0)
 		ft_usleep(10, philo);
-	while (philo->info->exit)
+	if (philo->info->philos_number == 1)
+		return (lone_fella(philo), NULL);
+	while (!check_life_status(philo))
 	{
 		eat(philo);
-		if (!philo->info->exit)
+		if (check_life_status(philo))
 			break ;
-		sleeep(philo);
-		if (!philo->info->exit)
-			break ;
-		think(philo);
 		if (check_meals(philo))
 			return (NULL);
+		sleeep(philo);
+		if (check_life_status(philo))
+			break ;
+		think(philo);
 	}
-	pthread_mutex_unlock(&(philo->info->print));
 	return (NULL);
 }
 

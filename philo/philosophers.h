@@ -27,6 +27,7 @@ typedef struct s_philo
 {
 	int				id;
 	long			meals;
+	pthread_mutex_t	eat;
 	long			last_meal;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
@@ -42,6 +43,7 @@ int		check_args(int ac, char **av);
 void	clear_up(t_philo *philo, int size);
 void	*monitoring(void *philo);
 
+int		lone_fella(t_philo *philo);
 void	think(t_philo *philo);
 void	sleeep(t_philo *philo);
 void	eat(t_philo *philo);
@@ -56,5 +58,6 @@ long	current_time(void);
 void	ft_print(char *str, t_philo *philo);
 int		ft_usleep(long milliseconds, t_philo *philo);
 int		check_meals(t_philo *philo);
+int		check_life_status(t_philo *philo);
 
 #endif

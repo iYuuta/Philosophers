@@ -1,11 +1,21 @@
 #include "philosophers.h"
 
+void	end_life(t_philo *philo)
+{
+	size_t i;
+
+	i = 0;
+	while (i++ < philo->info->philos_number)
+		sem_post(philo->info->terminate);
+}
+
 int	check_life_status(t_philo *philo)
 {
 	if ((current_time() - philo->last_meal) > philo->info->time_to_die)
 	{
 		ft_print("died", philo, 1);
 		philo->died = 0;
+		sem_post(philo->info->terminate);
 		return (1);
 	}
 	return (0);

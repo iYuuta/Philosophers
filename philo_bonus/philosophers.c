@@ -3,6 +3,8 @@
 int	start_life(t_philo *philo)
 {
 	philo->last_meal = current_time();
+	if (philo->id % 2 == 0)
+		usleep(200);
 	while (1)
 	{
 		eat(philo);
@@ -10,14 +12,14 @@ int	start_life(t_philo *philo)
 		{
 			sem_post(philo->info->terminate);
 		}
+		if (check_meals(philo))
+			exit(0);
 		sleeep(philo);
 		if (!philo->died)
 		{
 			sem_post(philo->info->terminate);
 		}
 		think(philo);
-		if (check_meals(philo))
-			exit(0);
 		if (!philo->died)
 		{
 			sem_post(philo->info->terminate);
@@ -25,20 +27,30 @@ int	start_life(t_philo *philo)
 	}
 }
 
+void	*term_childp(void *arg)
+{
+	size_t	i;
+	t_philo	*philo;
+	
+	i = -1;
+	philo = (t_philo *)arg;
+	sem_wait(philo->info->terminate);
+	while (++i < philo->info->philos_number)
+		kill(philo->info->pid[i], SIGTERM);
+	return (NULL);
+}
+
 int	finish_life(t_philo *philo, int *pid, int size)
 {
-	int	i;
+	int			i;
+	pthread_t	term;
 
 	i = -1;
-	if (philo->info->av5)
-	{
-		while (++i < size)
-			waitpid(pid[i], NULL, 0);
-		return (free(pid), 0);
-	}
-	sem_wait(philo->info->terminate);
+	pthread_create(&term, NULL, term_childp, philo);
 	while (++i < size)
-		kill(pid[i], SIGTERM);
+		waitpid(pid[i], NULL, 0);
+	sem_post(philo->info->terminate);
+	pthread_join(term, NULL);
 	return (free(pid), 0);
 }
 
@@ -61,6 +73,7 @@ int	process_init(t_philo *philo, int *pid, int size)
 			start_life(philo);
 			break ;
 		}
+		philo->info->pid = pid;
 		philo = philo->next;
 	}
 	return (finish_life(philo, pid, size));

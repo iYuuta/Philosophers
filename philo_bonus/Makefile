@@ -10,7 +10,7 @@ NAME = philo_bonus
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	cc $(OBJ) -o $(NAME) 
+	cc $(OBJ) $(CFLAGS) -o $(NAME) 
 
 %.o : %.c philosophers.h
 	cc $(CFLAGS) -c $< -o $@

@@ -1,32 +1,36 @@
 #include "philosophers.h"
 
-int	ft_death(t_info *info)
-{
-	if (info->number_of_meals == 0)
-		return (1);
-	if ((info->time_to_die < info->time_to_eat * 2)
-		|| info->time_to_die < info->time_to_eat + info->time_to_sleep)
-		return (0);
-	return (1);
-}
-
 t_info	*init_forks(t_info *info, int size)
 {
 	sem_unlink("/wait");
 	sem_unlink("/terminate");
+	sem_unlink("/forks");
 	info->wait = sem_open("/wait", O_CREAT, 0666, 1);
 	if (!info->wait)
 		return (NULL);
 	info->terminate = sem_open("/terminate", O_CREAT, 0666, 1);
 	if (!info->terminate)
 		return (NULL);
-	sem_unlink("/forks");
 	info->forks = sem_open("/forks", O_CREAT, 0666, size);
 	if (!info->forks)
 		return (sem_close(info->wait), NULL);
 	return (info);
 }
 
+t_info	*get_timestamps(t_info *info, char **av)
+{
+	info->start_time = current_time();
+	info->time_to_die = ft_atoi(av[2]);
+	info->time_to_eat = ft_atoi(av[3]);
+	info->time_to_sleep = ft_atoi(av[4]);
+	info->time_to_think = 0;
+	if (info->time_to_eat > info->time_to_sleep)
+	{
+		info->time_to_think = info->time_to_eat - info->time_to_sleep;
+	}
+	info->av5 = 0;
+	return (info);
+}
 t_info	*set_info(int ac, char **av)
 {
 	t_info	*info;
@@ -38,20 +42,11 @@ t_info	*set_info(int ac, char **av)
 	info = init_forks(info, info->philos_number);
 	if (!info)
 		return (free(info), NULL);
-	info->start_time = current_time();
-	info->time_to_die = ft_atoi(av[2]);
-	info->time_to_eat = ft_atoi(av[3]);
-	info->time_to_sleep = ft_atoi(av[4]);
-	info->time_to_think = 0;
-	if (info->time_to_eat > info->time_to_sleep)
-	{
-		info->time_to_think = info->time_to_eat - info->time_to_sleep;
-	}
-	info->av5 = 0;
+	info = get_timestamps(info, av);
 	if (ac > 5)
 	{
 		info->number_of_meals = ft_atoi(av[5]);
-		info->av5 = ft_death(info);
+		info->av5 = 1;
 	}
 	return (info);
 }

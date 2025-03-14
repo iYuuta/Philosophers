@@ -5,6 +5,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <pthread.h>
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <semaphore.h>
@@ -15,6 +17,7 @@ typedef struct s_info
 	sem_t	*wait;
 	sem_t	*terminate;
 	int		av5;
+	int		*pid;
 	size_t	start_time;
 	size_t	philos_number;
 	size_t	time_to_eat;

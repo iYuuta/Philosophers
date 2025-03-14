@@ -9,8 +9,8 @@ NAME = philo
 
 all : $(NAME)
 
-$(NAME) : $(OBJ)
-	cc $(OBJ) -o $(NAME) 
+$(NAME) : $(OBJ) 
+	cc $(OBJ) $(CFLAGS) -o $(NAME)
 
 %.o : %.c philosophers.h
 	cc $(CFLAGS) -c $< -o $@

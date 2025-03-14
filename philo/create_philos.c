@@ -55,6 +55,7 @@ t_philo	*create_philos(t_philo *philos, t_info *info, int size)
 		tmp->info = info;
 		if (pthread_mutex_init(&(tmp->fork), NULL) != 0)
 			return (clear_up(philos, i), NULL);
+		pthread_mutex_init(&(tmp->eat), NULL);
 		ft_lstadd_back(&philos, tmp);
 	}
 	return (philos);
