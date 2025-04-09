@@ -31,6 +31,7 @@ t_info	*get_timestamps(t_info *info, char **av)
 	info->av5 = 0;
 	return (info);
 }
+
 t_info	*set_info(int ac, char **av)
 {
 	t_info	*info;

@@ -26,7 +26,6 @@ long	current_time(void)
 void	ft_print(char *str, t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->info->print));
-	// printf("%d locked print ft_print\n", philo->id);
 	if (check_life_status(philo))
 	{
 		pthread_mutex_unlock(&(philo->info->print));
@@ -45,7 +44,6 @@ void	ft_print(char *str, t_philo *philo)
 		pthread_mutex_unlock(&(philo->info->print));
 		return ;
 	}
-	// printf("%d unlocked print ft_print\n", philo->id);
 	pthread_mutex_unlock(&(philo->info->print));
 }
 

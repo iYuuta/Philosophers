@@ -2,7 +2,7 @@
 
 void	end_life(t_philo *philo)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i++ < philo->info->philos_number)

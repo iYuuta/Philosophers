@@ -31,7 +31,7 @@ void	*term_childp(void *arg)
 {
 	size_t	i;
 	t_philo	*philo;
-	
+
 	i = -1;
 	philo = (t_philo *)arg;
 	sem_wait(philo->info->terminate);
